@@ -91,6 +91,7 @@ Options::Options(int argc, char** argv)
 	trGasIndex = -1;
 	trValueIndex = -1;
 	bool seenSeparator = false; // true if "--" has been seen.
+	bool seenCreateRandomTest = false;
 	for (auto i = 0; i < argc; ++i)
 	{
 		auto arg = std::string{argv[i]};
@@ -98,6 +99,11 @@ Options::Options(int argc, char** argv)
 		{
 			if (i + 1 >= argc)
 				BOOST_THROW_EXCEPTION(InvalidOption(arg + " option is missing an argument."));
+		};
+		auto throwIfNotRandomTest = [&seenCreateRandomTest, &arg]()
+		{
+			if (!seenCreateRandomTest)
+				BOOST_THROW_EXCEPTION(InvalidOption(arg + " option should follow after --createRandomTest."));
 		};
 		auto throwIfAfterSeparator = [&seenSeparator, &arg]()
 		{
@@ -232,7 +238,14 @@ Options::Options(int argc, char** argv)
 				g_logVerbosity = indentLevelInt;
 		}
 		else if (arg == "--createRandomTest")
+		{
 			createRandomTest = true;
+			seenCreateRandomTest = true;
+		}
+		else if (arg == "--filldebug")
+			throwIfNotRandomTest();
+		else if (arg == "--debug")
+			throwIfNotRandomTest();
 		else if (arg == "-t")
 		{
 			throwIfAfterSeparator();
