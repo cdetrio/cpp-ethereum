@@ -6,3 +6,5 @@ add_library(evmcore ${SRC_LIST} ${HEADERS})
 
 target_include_directories(evmcore PRIVATE ..)
 target_link_libraries(evmcore devcore)
+
+cotire(evmcore)

@@ -10,3 +10,5 @@ target_include_directories(ethcore PRIVATE ..)
 target_include_directories(ethcore PRIVATE ../utils)
 target_link_libraries(ethcore ${Dev_DEVCORE_LIBRARIES})
 target_link_libraries(ethcore ${Dev_DEVCRYPTO_LIBRARIES})
+
+cotire(ethcore)

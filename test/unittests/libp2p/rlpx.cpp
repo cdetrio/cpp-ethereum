@@ -43,7 +43,6 @@ using namespace dev;
 using namespace dev::crypto;
 using namespace dev::p2p;
 using namespace dev::test;
-using namespace CryptoPP;
 
 struct RLPXTestFixture: public TestOutputHelper {
 	RLPXTestFixture() : s_secp256k1(Secp256k1PP::get()) {}
