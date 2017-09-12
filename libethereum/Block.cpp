@@ -24,6 +24,7 @@
 #include <ctime>
 #include <boost/filesystem.hpp>
 #include <boost/timer.hpp>
+#include <boost/lexical_cast.hpp>
 #include <libdevcore/CommonIO.h>
 #include <libdevcore/Assertions.h>
 #include <libdevcore/TrieHash.h>
@@ -687,6 +688,8 @@ ExecutionResult Block::execute(LastBlockHashesFace const& _lh, Transaction const
 
 void Block::applyRewards(vector<BlockHeader> const& _uncleBlockHeaders, u256 const& _blockReward)
 {
+	// printf("Account.cpp createPrecompiledContract using startingBlock: %s\n", boost::lexical_cast<std::string>(startingBlock).c_str());
+	printf("Block.cpp applyRewards _blockReward: %s\n", boost::lexical_cast<std::string>(_blockReward).c_str());
 	u256 r = _blockReward;
 	for (auto const& i: _uncleBlockHeaders)
 	{

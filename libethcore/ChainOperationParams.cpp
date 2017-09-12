@@ -22,6 +22,7 @@
 #include "ChainOperationParams.h"
 #include <libdevcore/Log.h>
 #include <libdevcore/CommonData.h>
+#include <boost/lexical_cast.hpp>
 using namespace std;
 using namespace dev;
 using namespace eth;
@@ -56,6 +57,8 @@ ChainOperationParams::ChainOperationParams():
 
 EVMSchedule const& ChainOperationParams::scheduleForBlockNumber(u256 const& _blockNumber) const
 {
+	// 		printf("Account.cpp createPrecompiledContract using startingBlock: %s\n", boost::lexical_cast<std::string>(startingBlock).c_str());
+	printf("ChainOperationParams.cpp scheduleForBlockNumber. byzantiumForkBlock: %s\n", boost::lexical_cast<std::string>(byzantiumForkBlock).c_str());
 	if (_blockNumber >= constantinopleForkBlock)
 		return ConstantinopleSchedule;
 	else if (_blockNumber >= byzantiumForkBlock)

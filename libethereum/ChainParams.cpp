@@ -60,6 +60,7 @@ ChainParams ChainParams::loadConfig(string const& _json, h256 const& _stateRoot)
 	js::mObject obj = val.get_obj();
 
 	cp.sealEngineName = obj["sealEngine"].get_str();
+	printf("ChainParams.cpp loadConfig set cp.sealEngineName: %s\n", cp.sealEngineName.c_str());
 	// params
 	js::mObject params = obj["params"].get_obj();
 	cp.accountStartNonce = u256(fromBigEndian<u256>(fromHex(params["accountStartNonce"].get_str())));
@@ -140,7 +141,7 @@ ChainParams ChainParams::loadGenesis(string const& _json, h256 const& _stateRoot
 
 SealEngineFace* ChainParams::createSealEngine()
 {
-	printf("ChainParams.cpp createSealEngine.\n");
+	printf("ChainParams.cpp createSealEngine. sealEngineName: %s\n", sealEngineName.c_str());
 	SealEngineFace* ret = SealEngineRegistrar::create(sealEngineName);
 	assert(ret && "Seal engine not found");
 	if (!ret)

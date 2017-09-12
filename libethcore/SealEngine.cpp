@@ -63,6 +63,7 @@ void SealEngineFace::verifyTransaction(ImportRequirements::value _ir, Transactio
 
 SealEngineFace* SealEngineRegistrar::create(ChainOperationParams const& _params)
 {
+	printf("SealEngine.cpp SealEngineRegistrar::create _params.sealEngineName: %s\n", _params.sealEngineName.c_str());
 	SealEngineFace* ret = create(_params.sealEngineName);
 	assert(ret && "Seal engine not found.");
 	if (ret)
