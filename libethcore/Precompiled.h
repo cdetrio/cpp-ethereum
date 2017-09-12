@@ -47,7 +47,10 @@ public:
 	static PrecompiledPricer const& pricer(std::string const& _name);
 
 	/// Register an executor. In general just use ETH_REGISTER_PRECOMPILED.
-	static PrecompiledExecutor registerExecutor(std::string const& _name, PrecompiledExecutor const& _exec) { return (get()->m_execs[_name] = _exec); }
+	static PrecompiledExecutor registerExecutor(std::string const& _name, PrecompiledExecutor const& _exec) {
+		printf("Precompiled.h registerExecutor registering precompile name: %s\n", _name.c_str());
+		return (get()->m_execs[_name] = _exec);
+	}
 	/// Unregister an executor. Shouldn't generally be necessary.
 	static void unregisterExecutor(std::string const& _name) { get()->m_execs.erase(_name); }
 
