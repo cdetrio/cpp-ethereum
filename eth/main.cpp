@@ -327,7 +327,7 @@ int main(int argc, char** argv)
 	std::string rpcCorsDomain = "";
 
 	string jsonAdmin;
-	ChainParams chainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
+	ChainParams chainParams;
 	u256 gasFloor = Invalid256;
 	string privateChain;
 
