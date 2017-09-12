@@ -158,6 +158,7 @@ void spellCheckNetworkNamesInExpectField(json_spirit::mArray const& _expects)
 
 json_spirit::mValue doBlockchainTestNoLog(json_spirit::mValue const& _input, bool _fillin)
 {
+	printf("BlockChainTests.cpp doBlockchainTestNoLog.\n");
 	json_spirit::mObject tests;
 
 	// range-for is not used because iterators are necessary for removing elements later.
@@ -165,6 +166,8 @@ json_spirit::mValue doBlockchainTestNoLog(json_spirit::mValue const& _input, boo
 	{
 		string const& testname = i->first;
 		json_spirit::mObject const& inputTest = i->second.get_obj();
+		
+		printf("BlockChainTests.cpp doBlockchainTestNoLog testname: %s\n", testname.c_str());
 
 		//Select test by name if --singletest is set and not filling state tests as blockchain
 		if (!Options::get().fillchain && !TestOutputHelper::passTest(testname))
@@ -235,6 +238,8 @@ json_spirit::mValue doBlockchainTestNoLog(json_spirit::mValue const& _input, boo
 			dev::test::TestBlockChain::s_sealEngineNetwork = stringToNetId(inputTest.at("network").get_str());
 			if (test::isDisabledNetwork(dev::test::TestBlockChain::s_sealEngineNetwork))
 				continue;
+				
+			printf("BlockChainTests.cpp doBlockchainTestNoLog calling testBCTest..\n");
 			testBCTest(inputTest);
 		}
 	}
@@ -438,21 +443,26 @@ json_spirit::mObject fillBCTest(json_spirit::mObject const& _input)
 
 void testBCTest(json_spirit::mObject const& _o)
 {
+	printf("BlockChainTests.cpp testBCTest...\n");
 	string testName = TestOutputHelper::testName();
+	printf("BlockChainTests.cpp testBCTest creating TestBlock genesisBlock.\n");
 	TestBlock genesisBlock(_o.at("genesisBlockHeader").get_obj(), _o.at("pre").get_obj());
 	TestBlockChain blockchain(genesisBlock);
 
+	printf("BlockChainTests.cpp testBCTest creating TestBlockChain testChain.\n");
 	TestBlockChain testChain(genesisBlock);
 	assert(testChain.interface().isKnown(genesisBlock.blockHeader().hash(WithSeal)));
 
 	if (_o.count("genesisRLP") > 0)
 	{
 		TestBlock genesisFromRLP(_o.at("genesisRLP").get_str());
+		printf("BlockChainTests.cpp testBCTest calling checkBlocks...\n");
 		checkBlocks(genesisBlock, genesisFromRLP, testName);
 	}
 
 	for (auto const& bl: _o.at("blocks").get_array())
 	{
+		printf("BlockChainTests.cpp block loop iteration start.\n");
 		mObject blObj = bl.get_obj();
 		TestBlock blockFromRlp;
 		State const preState = testChain.topBlock().state();
@@ -522,11 +532,13 @@ void testBCTest(json_spirit::mObject const& _o)
 				uncleNumbers.push_back(uncle.blockHeader().number());
 			}
 		}
-
+		
+		printf("BlockChainTests.cpp testBCTest calling checkBlocks again...\n");
 		checkBlocks(blockFromFields, blockFromRlp, testName);
 
 		try
 		{
+			printf("BlockChainTests.cpp testBCTest calling blockchain.addBlock\n");
 			blockchain.addBlock(blockFromFields);
 		}
 		catch (Exception const& _e)
@@ -581,6 +593,7 @@ void testBCTest(json_spirit::mObject const& _o)
 	ImportTest::importState(_o.at("postState").get_obj(), postState);
 	ImportTest::compareStates(postState, testChain.topBlock().state());
 	ImportTest::compareStates(postState, blockchain.topBlock().state());
+	printf("BlockChainTests.cpp testBCTest is done.\n");
 }
 
 bigint calculateMiningReward(u256 const& _blNumber, u256 const& _unNumber1, u256 const& _unNumber2, SealEngineFace const& _sealEngine)
