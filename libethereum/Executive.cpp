@@ -247,7 +247,7 @@ bool Executive::call(Address const& _receiveAddress, Address const& _senderAddre
 
 bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address const& _origin)
 {
-	printf("Executive.cpp call. address: %s\n", _p.codeAddress.hex());
+	printf("Executive.cpp call. address: %s\n", _p.codeAddress.hex().c_str());
 	// If external transaction.
 	if (m_t)
 	{
