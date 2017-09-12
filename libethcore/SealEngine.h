@@ -80,6 +80,10 @@ public:
 
 	virtual bool isPrecompiled(Address const& _a, u256 const& _blockNumber) const
 	{
+		printf("SealEngine.h isPrecompiled address _a: %s\n", _a.hex().c_str());
+		printf("m_params.precompiled.at(_a).startingBlock(): %d\n", m_params.precompiled.at(_a).startingBlock());
+		printf("_blockNumber: %d\n", _blockNumber);
+		printf("m_params.precompiled.count(_a): %d\n", m_params.precompiled.count(_a));
 		return m_params.precompiled.count(_a) != 0 && _blockNumber >= m_params.precompiled.at(_a).startingBlock();
 	}
 	virtual bigint costOfPrecompiled(Address const& _a, bytesConstRef _in, u256 const&) const { return m_params.precompiled.at(_a).cost(_in); }
