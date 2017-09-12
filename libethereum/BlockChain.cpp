@@ -39,6 +39,7 @@
 #endif
 
 #include <boost/filesystem.hpp>
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 using namespace dev;
@@ -224,11 +225,13 @@ BlockHeader const& BlockChain::genesis() const
 
 void BlockChain::init(ChainParams const& _p)
 {
+	printf("BlockChain.cpp BlockChain::init. ChainParams _p.byzantiumForkBlock: %s\n", boost::lexical_cast<std::string>(_p.byzantiumForkBlock).c_str());
 	// initialise deathrow.
 	m_cacheUsage.resize(c_collectionQueueSize);
 	m_lastCollection = chrono::system_clock::now();
 
 	// Initialise with the genesis as the last block on the longest chain.
+	prinf("calling m_sealEngine.reset and m_params.createSealEngine()");
 	m_params = _p;
 	m_sealEngine.reset(m_params.createSealEngine());
 	m_genesis.clear();

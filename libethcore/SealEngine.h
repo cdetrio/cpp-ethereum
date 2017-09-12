@@ -74,7 +74,10 @@ public:
 	virtual void cancelGeneration() {}
 
 	ChainOperationParams const& chainParams() const { return m_params; }
-	void setChainParams(ChainOperationParams const& _params) { m_params = _params; }
+	void setChainParams(ChainOperationParams const& _params) {
+		printf("SealEngine.h setChainParams. _params.byzantiumForkBlock: %s\n", boost::lexical_cast<std::string>(_params.byzantiumForkBlock).c_str());
+		m_params = _params;
+	}
 	SealEngineFace* withChainParams(ChainOperationParams const& _params) { setChainParams(_params); return this; }
 	virtual EVMSchedule const& evmSchedule(u256 const& _blockNumber) const = 0;
 	virtual u256 blockReward(u256 const& _blockNumber) const = 0;

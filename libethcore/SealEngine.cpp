@@ -64,6 +64,7 @@ void SealEngineFace::verifyTransaction(ImportRequirements::value _ir, Transactio
 SealEngineFace* SealEngineRegistrar::create(ChainOperationParams const& _params)
 {
 	printf("SealEngine.cpp SealEngineRegistrar::create _params.sealEngineName: %s\n", _params.sealEngineName.c_str());
+	printf("SealEngine.cpp SealEngineRegistrar::create _params.byzantiumForkBlock: %s\n", boost::lexical_cast<std::string>(_params.byzantiumForkBlock).c_str());
 	SealEngineFace* ret = create(_params.sealEngineName);
 	assert(ret && "Seal engine not found.");
 	if (ret)
@@ -73,11 +74,15 @@ SealEngineFace* SealEngineRegistrar::create(ChainOperationParams const& _params)
 
 EVMSchedule const& SealEngineBase::evmSchedule(u256 const& _blockNumber) const
 {
+	printf("SealEngine.cpp evmSchedule _blockNumber: %s\n", boost::lexical_cast<std::string>(_blockNumber).c_str());
+	printf("SealEngine.cpp chainParams().byzantiumForkBlock: %s\n", boost::lexical_cast<std::string>(chainParams().byzantiumForkBlock).c_str());
 	return chainParams().scheduleForBlockNumber(_blockNumber);
 }
 
 u256 SealEngineBase::blockReward(u256 const& _blockNumber) const
 {
+	printf("SealEngine.cpp blockReward.\n");
+	printf("_blockNumber: %s\n", boost::lexical_cast<std::string>(_blockNumber).c_str());
 	EVMSchedule const& schedule{evmSchedule(_blockNumber)};
 	return chainParams().blockReward(schedule);
 }
