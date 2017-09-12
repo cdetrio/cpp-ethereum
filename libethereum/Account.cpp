@@ -23,6 +23,7 @@
 #include <json_spirit/JsonSpiritHeaders.h>
 #include <libethcore/ChainOperationParams.h>
 #include <libethcore/Precompiled.h>
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 using namespace dev;
@@ -54,18 +55,25 @@ PrecompiledContract createPrecompiledContract(js::mObject& _precompiled)
 {
 	printf("Account.cpp createPrecompiledContract.\n");
 	auto n = _precompiled["name"].get_str();
+	printf("Account.cpp createPrecompiledContract got name: %s\n", n.c_str());
 	try
 	{
 		u256 startingBlock = 0;
 		if (_precompiled.count("startingBlock"))
 			startingBlock = u256(_precompiled["startingBlock"].get_str());
 
-		if (!_precompiled.count("linear"))
+		// boost::lexical_cast<std::string>(_blockNumber).c_str())
+		printf("Account.cpp createPrecompiledContract using startingBlock: %s\n", boost::lexical_cast<std::string>(startingBlock).c_str());
+		if (!_precompiled.count("linear")) {
+			printf("Account.cpp createPrecompiledContract linear key not found. using built-in pricer..\n");
 			return PrecompiledContract(PrecompiledRegistrar::pricer(n), PrecompiledRegistrar::executor(n), startingBlock);
+		}
 
 		auto l = _precompiled["linear"].get_obj();
 		unsigned base = toUnsigned(l["base"]);
 		unsigned word = toUnsigned(l["word"]);
+		printf("Account.cpp createPrecompiledContract got base: %lu\n", base);
+		printf("Account.cpp createPrecompiledContract got word: %lu\n", word);
 		return PrecompiledContract(base, word, PrecompiledRegistrar::executor(n), startingBlock);
 	}
 	catch (PricerNotFound const&)
