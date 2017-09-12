@@ -72,8 +72,8 @@ PrecompiledContract createPrecompiledContract(js::mObject& _precompiled)
 		auto l = _precompiled["linear"].get_obj();
 		unsigned base = toUnsigned(l["base"]);
 		unsigned word = toUnsigned(l["word"]);
-		printf("Account.cpp createPrecompiledContract got base: %lu\n", base);
-		printf("Account.cpp createPrecompiledContract got word: %lu\n", word);
+		printf("Account.cpp createPrecompiledContract got base: %u\n", base);
+		printf("Account.cpp createPrecompiledContract got word: %u\n", word);
 		return PrecompiledContract(base, word, PrecompiledRegistrar::executor(n), startingBlock);
 	}
 	catch (PricerNotFound const&)
