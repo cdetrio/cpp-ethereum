@@ -447,8 +447,12 @@ void testBCTest(json_spirit::mObject const& _o)
 	string testName = TestOutputHelper::testName();
 	printf("BlockChainTests.cpp testBCTest creating TestBlock genesisBlock.\n");
 	TestBlock genesisBlock(_o.at("genesisBlockHeader").get_obj(), _o.at("pre").get_obj());
+	
+	rintf("BlockChainTests.cpp testBCTest creating TestBlockChain blockchain.\n");
 	TestBlockChain blockchain(genesisBlock);
 
+	// the jsonToAccountMap happens like 5 times above.
+	
 	printf("BlockChainTests.cpp testBCTest creating TestBlockChain testChain.\n");
 	TestBlockChain testChain(genesisBlock);
 	assert(testChain.interface().isKnown(genesisBlock.blockHeader().hash(WithSeal)));
@@ -456,13 +460,14 @@ void testBCTest(json_spirit::mObject const& _o)
 	if (_o.count("genesisRLP") > 0)
 	{
 		TestBlock genesisFromRLP(_o.at("genesisRLP").get_str());
-		printf("BlockChainTests.cpp testBCTest calling checkBlocks...\n");
+		printf("BlockChainTests.cpp testBCTest calling checkBlocks on genesisFromRLP...\n");
 		checkBlocks(genesisBlock, genesisFromRLP, testName);
 	}
 
+	printf("BlockChainTests.cpp testBCTest loop over all blocks..\n");
 	for (auto const& bl: _o.at("blocks").get_array())
 	{
-		printf("BlockChainTests.cpp block loop iteration start.\n");
+		printf("BlockChainTests.cpp testBCTest beginnign of loop, doing a block.\n");
 		mObject blObj = bl.get_obj();
 		TestBlock blockFromRlp;
 		State const preState = testChain.topBlock().state();
@@ -473,6 +478,8 @@ void testBCTest(json_spirit::mObject const& _o)
 			blockFromRlp = blRlp;
 			if (blObj.count("blockHeader") == 0)
 				blockFromRlp.noteDirty();			//disable blockHeader check in TestBlock
+				
+			printf("BlockChainTests.cpp testBCTest doing addBlock blockFromRlp...\n");
 			testChain.addBlock(blockFromRlp);
 		}
 		// if exception is thrown, RLP is invalid and no blockHeader, Transaction list, or Uncle list should be given
@@ -511,11 +518,14 @@ void testBCTest(json_spirit::mObject const& _o)
 			"filename: " + TestOutputHelper::testFileName() +
 			" testname: " + TestOutputHelper::testName()
 		);
+		
+		printf("BlockChainTests.cpp testBCTest doing blockFromFields addTransaction loop...\n");
 		for (auto const& txObj: blObj["transactions"].get_array())
 		{
 			TestTransaction transaction(txObj.get_obj());
 			blockFromFields.addTransaction(transaction);
 		}
+		printf("BlockChainTests.cpp testBCTest done adding transactions.\n");
 
 		// ImportUncles
 		vector<u256> uncleNumbers;
@@ -533,12 +543,12 @@ void testBCTest(json_spirit::mObject const& _o)
 			}
 		}
 		
-		printf("BlockChainTests.cpp testBCTest calling checkBlocks again...\n");
+		printf("BlockChainTests.cpp testBCTest calling checkBlocks on blockFromFields...\n");
 		checkBlocks(blockFromFields, blockFromRlp, testName);
 
 		try
 		{
-			printf("BlockChainTests.cpp testBCTest calling blockchain.addBlock\n");
+			printf("BlockChainTests.cpp testBCTest calling blockchain.addBlock on blockFromFields\n");
 			blockchain.addBlock(blockFromFields);
 		}
 		catch (Exception const& _e)
