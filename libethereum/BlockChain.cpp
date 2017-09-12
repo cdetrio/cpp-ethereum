@@ -231,7 +231,7 @@ void BlockChain::init(ChainParams const& _p)
 	m_lastCollection = chrono::system_clock::now();
 
 	// Initialise with the genesis as the last block on the longest chain.
-	prinf("calling m_sealEngine.reset and m_params.createSealEngine()");
+	printf("calling m_sealEngine.reset and m_params.createSealEngine()\n");
 	m_params = _p;
 	m_sealEngine.reset(m_params.createSealEngine());
 	m_genesis.clear();
