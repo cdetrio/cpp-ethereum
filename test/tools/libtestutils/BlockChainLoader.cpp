@@ -36,6 +36,7 @@ BlockChainLoader::BlockChainLoader(Json::Value const& _json, eth::Network _sealE
 	bytes genesisBlock = fromHex(_json["genesisRLP"].asString());
 
 	Json::FastWriter a;
+	printf("BlockChainLoader.cpp calling ChainParams..\n");
 	m_bc.reset(new BlockChain(ChainParams(genesisInfo(_sealEngineNetwork), genesisBlock, jsonToAccountMap(a.write(_json["pre"]))), m_dir.path(), WithExisting::Kill));
 
 	// load pre state

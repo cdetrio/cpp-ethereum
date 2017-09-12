@@ -216,6 +216,7 @@ std::tuple<eth::State, ImportTest::ExecOutput, eth::ChangeLog> ImportTest::execu
 	ExecOutput out(std::make_pair(eth::ExecutionResult(), eth::TransactionReceipt(h256(), u256(), eth::LogEntries())));
 	try
 	{
+		printf("ImportTest.cpp executeTransaction calling sealSengine ChainParams.\n");
 		unique_ptr<SealEngineFace> se(ChainParams(genesisInfo(_sealEngineNetwork)).createSealEngine());
 		if (Options::get().jsontrace)
 		{

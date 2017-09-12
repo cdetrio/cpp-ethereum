@@ -460,6 +460,7 @@ TestBlockChain::TestBlockChain(TestBlock const& _genesisBlock)
 
 void TestBlockChain::reset(TestBlock const& _genesisBlock)
 {
+	printf("BlockChainHelper.cpp TestBlockChain::reset calling ChainParams...\n");
 	m_tempDirBlockchain.reset(new TransientDirectory);
 	ChainParams p = ChainParams(genesisInfo(TestBlockChain::s_sealEngineNetwork), _genesisBlock.bytes(), _genesisBlock.accountMap());
 
