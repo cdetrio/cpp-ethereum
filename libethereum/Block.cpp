@@ -508,7 +508,7 @@ u256 Block::enact(VerifiedBlockRef const& _block, BlockChain const& _bc)
 			receipts.push_back(receiptRLP.out());
 			printf("processing tx receipt...\n");
 			cwarn << "Trying to dump tx receipt:";
-			cwarn << receiptRLP;
+			cwarn << receiptRLP.out();
 			cwarn << "receipt should be dumped ^^";
 			++i;
 		}
