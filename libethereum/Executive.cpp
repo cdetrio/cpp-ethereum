@@ -247,6 +247,7 @@ bool Executive::call(Address const& _receiveAddress, Address const& _senderAddre
 
 bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address const& _origin)
 {
+	printf("Executive.cpp call. address: %s\n", _p.codeAddress.hex());
 	// If external transaction.
 	if (m_t)
 	{
@@ -259,11 +260,14 @@ bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address co
 
 	m_savepoint = m_s.savepoint();
 
+	printf("checking if called address is a precompile..\n");
 	if (m_sealEngine.isPrecompiled(_p.codeAddress, m_envInfo.number()))
 	{
+		printf("YES IS PRECOMPILE.\n");
 		bigint g = m_sealEngine.costOfPrecompiled(_p.codeAddress, _p.data, m_envInfo.number());
 		if (_p.gas < g)
 		{
+			printf("OOG exception.\n");
 			m_excepted = TransactionException::OutOfGasBase;
 			// Bail from exception.
 			
@@ -278,6 +282,7 @@ bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address co
 		}
 		else
 		{
+			printf("have sufficient gas. executing precompile..\n");
 			m_gas = (u256)(_p.gas - g);
 			bytes output;
 			bool success;
@@ -286,6 +291,7 @@ bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address co
 			m_output = owning_bytes_ref{std::move(output), 0, outputSize};
 			if (!success)
 			{
+				printf("precompile execution failed.\n");
 				m_gas = 0;
 				m_excepted = TransactionException::OutOfGas;
 				return true;	// true means no need to run go().
@@ -294,9 +300,11 @@ bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address co
 	}
 	else
 	{
+		printf("NO IS NOT precompile.\n");
 		m_gas = _p.gas;
 		if (m_s.addressHasCode(_p.codeAddress))
 		{
+			printf("NO IS NOT precompile. address has code\n");
 			bytes const& c = m_s.code(_p.codeAddress);
 			h256 codeHash = m_s.codeHash(_p.codeAddress);
 			m_ext = make_shared<ExtVM>(m_s, m_envInfo, m_sealEngine, _p.receiveAddress, _p.senderAddress, _origin, _p.apparentValue, _gasPrice, _p.data, &c, codeHash, m_depth, _p.staticCall);
