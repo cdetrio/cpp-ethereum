@@ -287,6 +287,7 @@ bool ExitHandler::s_shouldExit = false;
 
 int main(int argc, char** argv)
 {
+	printf("main.cpp main.\n");
 	setDefaultOrCLocale();
 
 	// Init secp256k1 context by calling one of the functions.
@@ -327,7 +328,9 @@ int main(int argc, char** argv)
 	std::string rpcCorsDomain = "";
 
 	string jsonAdmin;
-	ChainParams chainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
+	printf("callig chainParams genesisInfo MainNetwork..\n");
+	//ChainParams chainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
+	ChainParams chainParams();
 	u256 gasFloor = Invalid256;
 	string privateChain;
 
@@ -571,6 +574,7 @@ int main(int argc, char** argv)
 		}
 		else if (arg == "--config" && i + 1 < argc)
 		{
+			printf("main.cpp got --config argument..\n");
 			try
 			{
 				configJSON = contentsString(argv[++i]);
@@ -788,8 +792,10 @@ int main(int argc, char** argv)
 		}
 	}
 
+	printf("main.cpp checking if configJSON is empty..\n");
 	if (!configJSON.empty())
 	{
+		printf("main.cpp configJSON present. calling chainParams.loadConfig..\n");
 		try
 		{
 			chainParams = chainParams.loadConfig(configJSON);
@@ -802,9 +808,10 @@ int main(int argc, char** argv)
 		}
 	}
 
-
+	printf("main.cpp checking if gensisJSON is empty..\n");
 	if (!genesisJSON.empty())
 	{
+		printf("main.cpp genesisJSON is present. calling chainParams.loadGenesis..\n");
 		try
 		{
 			chainParams = chainParams.loadGenesis(genesisJSON);
