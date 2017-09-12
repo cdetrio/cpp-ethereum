@@ -132,7 +132,10 @@ public:
 	static SealEngineFace* create(ChainOperationParams const& _params);
 	static SealEngineFace* create(std::string const& _name) { if (!get()->m_sealEngines.count(_name)) return nullptr; return get()->m_sealEngines[_name](); }
 
-	template <class SealEngine> static SealEngineFactory registerSealEngine(std::string const& _name) { return (get()->m_sealEngines[_name] = [](){return new SealEngine;}); }
+	template <class SealEngine> static SealEngineFactory registerSealEngine(std::string const& _name) {
+		printf("SealEngine.h registerSealEngine _name: %s\n", _name.c_str());
+		return (get()->m_sealEngines[_name] = [](){return new SealEngine;});
+	}
 	static void unregisterSealEngine(std::string const& _name) { get()->m_sealEngines.erase(_name); }
 
 private:
