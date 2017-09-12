@@ -448,7 +448,7 @@ void testBCTest(json_spirit::mObject const& _o)
 	printf("BlockChainTests.cpp testBCTest creating TestBlock genesisBlock.\n");
 	TestBlock genesisBlock(_o.at("genesisBlockHeader").get_obj(), _o.at("pre").get_obj());
 	
-	rintf("BlockChainTests.cpp testBCTest creating TestBlockChain blockchain.\n");
+	printf("BlockChainTests.cpp testBCTest creating TestBlockChain blockchain.\n");
 	TestBlockChain blockchain(genesisBlock);
 
 	// the jsonToAccountMap happens like 5 times above.
