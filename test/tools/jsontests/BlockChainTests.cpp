@@ -501,6 +501,11 @@ void testBCTest(json_spirit::mObject const& _o)
 			checkJsonSectionForInvalidBlock(blObj);
 			continue;
 		}
+		
+		printf("imported block from RLP.. now dumping state..\n");
+		cwarn << "Trying to dump state:";
+		cwarn << testChain.topBlock().state();
+		cwarn << "state should be dumped ^^";
 
 		//block from RLP successfully imported. now compare this rlp to test sections
 		BOOST_REQUIRE_MESSAGE(blObj.count("blockHeader"),
