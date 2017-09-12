@@ -459,6 +459,7 @@ u256 Block::enactOn(VerifiedBlockRef const& _block, BlockChain const& _bc)
 
 u256 Block::enact(VerifiedBlockRef const& _block, BlockChain const& _bc)
 {
+	printf("Block.cpp enact.\n");
 	noteChain(_bc);
 
 	DEV_TIMED_FUNCTION_ABOVE(500);
@@ -484,6 +485,7 @@ u256 Block::enact(VerifiedBlockRef const& _block, BlockChain const& _bc)
 
 	vector<bytes> receipts;
 
+	printf("Block.cpp enact. play transactions..\n");
 	// All ok with the block generally. Play back the transactions now...
 	unsigned i = 0;
 	DEV_TIMED_ABOVE("txExec", 500)
@@ -626,6 +628,7 @@ u256 Block::enact(VerifiedBlockRef const& _block, BlockChain const& _bc)
 			}
 		}
 
+	printf("Block.cpp enact. applyRewards..\n");
 	assert(_bc.sealEngine());
 	DEV_TIMED_ABOVE("applyRewards", 500)
 		applyRewards(rewarded, _bc.sealEngine()->blockReward(m_currentBlock.number()));
@@ -635,9 +638,16 @@ u256 Block::enact(VerifiedBlockRef const& _block, BlockChain const& _bc)
 	DEV_TIMED_ABOVE("commit", 500)
 		m_state.commit(removeEmptyAccounts ? State::CommitBehaviour::RemoveEmptyAccounts : State::CommitBehaviour::KeepEmptyAccounts);
 
+	printf("m_currentBlock.stateRoot(): %s\n", m_currentBlock.stateRoot().hex().c_str());
+	printf("m_previousBlock.stateRoot(): %s\n", m_previousBlock.stateRoot().hex().c_str());
+	printf("m_state.rootHash(): %s\n", rootHash().hex().c_str());
 	// Hash the state trie and check against the state_root hash in m_currentBlock.
 	if (m_currentBlock.stateRoot() != m_previousBlock.stateRoot() && m_currentBlock.stateRoot() != rootHash())
 	{
+		printf("invalid state root. throwing exception.\n");
+		cwarn << "Trying to dump state:";
+		cwarn << m_currentBlock.state();
+		cwarn << "state should be dumped ^^";
 		auto r = rootHash();
 		m_state.db().rollback();		// TODO: API in State for this?
 		BOOST_THROW_EXCEPTION(InvalidStateRoot() << Hash256RequirementError(m_currentBlock.stateRoot(), r));
