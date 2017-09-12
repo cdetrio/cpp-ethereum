@@ -646,7 +646,7 @@ u256 Block::enact(VerifiedBlockRef const& _block, BlockChain const& _bc)
 	{
 		printf("invalid state root. throwing exception.\n");
 		cwarn << "Trying to dump state:";
-		cwarn << m_currentBlock.state();
+		cwarn << m_state;
 		cwarn << "state should be dumped ^^";
 		auto r = rootHash();
 		m_state.db().rollback();		// TODO: API in State for this?
