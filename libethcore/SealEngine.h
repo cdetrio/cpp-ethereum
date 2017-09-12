@@ -29,6 +29,7 @@
 #include <libdevcore/RLP.h>
 #include "BlockHeader.h"
 #include "Common.h"
+#include <boost/lexical_cast.hpp>
 
 namespace dev
 {
@@ -80,9 +81,10 @@ public:
 
 	virtual bool isPrecompiled(Address const& _a, u256 const& _blockNumber) const
 	{
+		// std::string s = boost::lexical_cast<std::string>(123);
 		printf("SealEngine.h isPrecompiled address _a: %s\n", _a.hex().c_str());
-		printf("m_params.precompiled.at(_a).startingBlock(): %d\n", m_params.precompiled.at(_a).startingBlock());
-		printf("_blockNumber: %d\n", _blockNumber);
+		printf("m_params.precompiled.at(_a).startingBlock(): %s\n", boost::lexical_cast<std::string>(m_params.precompiled.at(_a).startingBlock()).c_str());
+		printf("_blockNumber: %s\n", boost::lexical_cast<std::string>(_blockNumber).c_str());
 		printf("m_params.precompiled.count(_a): %d\n", m_params.precompiled.count(_a));
 		return m_params.precompiled.count(_a) != 0 && _blockNumber >= m_params.precompiled.at(_a).startingBlock();
 	}
