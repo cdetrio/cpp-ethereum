@@ -330,7 +330,7 @@ int main(int argc, char** argv)
 	string jsonAdmin;
 	printf("callig chainParams genesisInfo MainNetwork..\n");
 	//ChainParams chainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
-	ChainParams chainParams();
+	ChainParams chainParams;
 	u256 gasFloor = Invalid256;
 	string privateChain;
 
