@@ -53,6 +53,7 @@ ChainParams::ChainParams(string const& _json, h256 const& _stateRoot)
 
 ChainParams ChainParams::loadConfig(string const& _json, h256 const& _stateRoot) const
 {
+	printf("ChainParams.cpp loadConfig.\n");
 	ChainParams cp(*this);
 	js::mValue val;
 	json_spirit::read_string(_json, val);
@@ -101,6 +102,7 @@ ChainParams ChainParams::loadConfig(string const& _json, h256 const& _stateRoot)
 
 ChainParams ChainParams::loadGenesisState(string const& _json, h256 const& _stateRoot) const
 {
+	printf("ChainParams.cpp loadGenesisState.\n");
 	ChainParams cp(*this);
 	cp.genesisState = jsonToAccountMap(_json, cp.accountStartNonce, nullptr, &cp.precompiled);
 	cp.stateRoot = _stateRoot ? _stateRoot : cp.calculateStateRoot(true);
@@ -109,6 +111,7 @@ ChainParams ChainParams::loadGenesisState(string const& _json, h256 const& _stat
 
 ChainParams ChainParams::loadGenesis(string const& _json, h256 const& _stateRoot) const
 {
+	printf("ChainParams.cpp loadGenesis.\n");
 	ChainParams cp(*this);
 
 	js::mValue val;
@@ -137,6 +140,7 @@ ChainParams ChainParams::loadGenesis(string const& _json, h256 const& _stateRoot
 
 SealEngineFace* ChainParams::createSealEngine()
 {
+	printf("ChainParams.cpp createSealEngine.\n");
 	SealEngineFace* ret = SealEngineRegistrar::create(sealEngineName);
 	assert(ret && "Seal engine not found");
 	if (!ret)
@@ -152,6 +156,7 @@ SealEngineFace* ChainParams::createSealEngine()
 
 void ChainParams::populateFromGenesis(bytes const& _genesisRLP, AccountMap const& _state)
 {
+	printf("ChainParams.cpp populateFromGenesis.\n");
 	BlockHeader bi(_genesisRLP, RLP(&_genesisRLP)[0].isList() ? BlockData : HeaderData);
 	parentHash = bi.parentHash();
 	author = bi.author();

@@ -52,6 +52,7 @@ uint64_t toUnsigned(js::mValue const& _v)
 
 PrecompiledContract createPrecompiledContract(js::mObject& _precompiled)
 {
+	printf("Account.cpp createPrecompiledContract.\n");
 	auto n = _precompiled["name"].get_str();
 	try
 	{
@@ -83,6 +84,7 @@ PrecompiledContract createPrecompiledContract(js::mObject& _precompiled)
 }
 AccountMap dev::eth::jsonToAccountMap(std::string const& _json, u256 const& _defaultNonce, AccountMaskMap* o_mask, PrecompiledContractMap* o_precompiled)
 {
+	printf("Account.cpp jsonToAccountMap.\n");
 	auto u256Safe = [](std::string const& s) -> u256 {
 		bigint ret(s);
 		if (ret >= bigint(1) << 256)
@@ -99,6 +101,8 @@ AccountMap dev::eth::jsonToAccountMap(std::string const& _json, u256 const& _def
 	{
 		Address a(fromHex(account.first));
 		auto o = account.second.get_obj();
+		
+		printf("Account.cpp account loop. doing address: %s\n", a.hex().c_str());
 
 		bool haveBalance = (o.count("wei") || o.count("finney") || o.count("balance"));
 		bool haveNonce = o.count("nonce");
@@ -146,12 +150,15 @@ AccountMap dev::eth::jsonToAccountMap(std::string const& _json, u256 const& _def
 				ret[a] = Account(0, 0);
 		}
 
+		printf("checking if account is a precompile...\n");
 		if (o_precompiled && o.count("precompiled"))
 		{
+			printf("got precompiled account in json. calling createPrecompiledContract...\n");
 			js::mObject p = o["precompiled"].get_obj();
 			o_precompiled->insert(make_pair(a, createPrecompiledContract(p)));
 		}
 	}
 
+	printf("Account.cpp done executing jsonToAccountMap.\n");
 	return ret;
 }
