@@ -287,6 +287,7 @@ bool Executive::call(CallParameters const& _p, u256 const& _gasPrice, Address co
 			bytes output;
 			bool success;
 			tie(success, output) = m_sealEngine.executePrecompiled(_p.codeAddress, _p.data, m_envInfo.number());
+			printf("precompile returned.\n");
 			size_t outputSize = output.size();
 			m_output = owning_bytes_ref{std::move(output), 0, outputSize};
 			if (!success)

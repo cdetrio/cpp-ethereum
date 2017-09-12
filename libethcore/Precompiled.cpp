@@ -34,6 +34,7 @@ PrecompiledRegistrar* PrecompiledRegistrar::s_this = nullptr;
 
 PrecompiledExecutor const& PrecompiledRegistrar::executor(std::string const& _name)
 {
+	printf("Precompiled.cpp executor.\n");
 	if (!get()->m_execs.count(_name))
 		BOOST_THROW_EXCEPTION(ExecutorNotFound());
 	return get()->m_execs[_name];
