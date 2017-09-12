@@ -75,9 +75,11 @@ EVMSchedule const& ChainOperationParams::scheduleForBlockNumber(u256 const& _blo
 
 u256 ChainOperationParams::blockReward(EVMSchedule const& _schedule) const
 {
-	if (_schedule.blockRewardOverwrite)
+	printf("ChainOperationParams.cpp blockReward.\n");
+	if (_schedule.blockRewardOverwrite) {
+		printf("blockRewardOverwrite is enabled.\n");
 		return *_schedule.blockRewardOverwrite;
-	else
+	} else
 		return m_blockReward;
 }
 
