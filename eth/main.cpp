@@ -30,6 +30,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/trim_all.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/optional.hpp>
 
 #include <libdevcore/FileSystem.h>
 #include <libethashseal/EthashAux.h>
@@ -327,7 +328,8 @@ int main(int argc, char** argv)
 	std::string rpcCorsDomain = "";
 
 	string jsonAdmin;
-	ChainParams chainParams;
+	//ChainParams chainParams;
+	boost::optional<ChainParams> chainParams;
 	u256 gasFloor = Invalid256;
 	string privateChain;
 
@@ -596,14 +598,10 @@ int main(int argc, char** argv)
 		}
 		else if (arg == "--gas-floor" && i + 1 < argc)
 			gasFloor = u256(argv[++i]);
-		else if (arg == "--mainnet") {
+		else if (arg == "--mainnet")
 			chainParams = ChainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
-			chainConfigIsSet = true;
-		}
-		else if (arg == "--ropsten" || arg == "--testnet") {
+		else if (arg == "--ropsten" || arg == "--testnet")
 			chainParams = ChainParams(genesisInfo(eth::Network::Ropsten), genesisStateRoot(eth::Network::Ropsten));
-			chainConfigIsSet = true;
-		}
 		else if (arg == "--ask" && i + 1 < argc)
 		{
 			try
@@ -798,7 +796,6 @@ int main(int argc, char** argv)
 		try
 		{
 			chainParams = chainParams.loadConfig(configJSON);
-			chainConfigIsSet = true;
 		}
 		catch (...)
 		{
@@ -814,7 +811,6 @@ int main(int argc, char** argv)
 		try
 		{
 			chainParams = chainParams.loadGenesis(genesisJSON);
-			chainConfigIsSet = true;
 		}
 		catch (...)
 		{
@@ -848,9 +844,9 @@ int main(int argc, char** argv)
 //	if (gasFloor != Invalid256)
 //		c_gasFloorTarget = gasFloor;
 
-	if (!chainConfigIsSet)
+	if (!chainParams)
 		// default to mainnet if not already set with any of `--mainnet`, `--testnet`, `--genesis`, `--config`
-		ChainParams chainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
+		chainParams = ChainParams(genesisInfo(eth::Network::MainNetwork), genesisStateRoot(eth::Network::MainNetwork));
 
 	if (g_logVerbosity > 0)
 		cout << EthGrayBold "cpp-ethereum, a C++ Ethereum client" EthReset << "\n";
