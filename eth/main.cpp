@@ -795,7 +795,8 @@ int main(int argc, char** argv)
 	{
 		try
 		{
-			chainParams = *chainParams.loadConfig(configJSON);
+			chainParams = ChainParams();
+			chainParams = chainParams.loadConfig(configJSON);
 		}
 		catch (...)
 		{
@@ -810,7 +811,8 @@ int main(int argc, char** argv)
 	{
 		try
 		{
-			chainParams = *chainParams.loadGenesis(genesisJSON);
+			chainParams = ChainParams();
+			chainParams = chainParams.loadGenesis(genesisJSON);
 		}
 		catch (...)
 		{
@@ -836,9 +838,11 @@ int main(int argc, char** argv)
 
 	if (!privateChain.empty())
 	{
-		*chainParams.extraData = sha3(privateChain).asBytes();
-		*chainParams.difficulty = *chainParams.minimumDifficulty;
-		*chainParams.gasLimit = u256(1) << 32;
+		if (!chainParams)
+			chainParams = ChainParams();
+		chainParams.extraData = sha3(privateChain).asBytes();
+		chainParams.difficulty = chainParams.minimumDifficulty;
+		chainParams.gasLimit = u256(1) << 32;
 	}
 	// TODO: Open some other API path
 //	if (gasFloor != Invalid256)
