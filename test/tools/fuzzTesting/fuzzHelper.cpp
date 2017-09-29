@@ -449,8 +449,10 @@ RandomCodeOptions::RandomCodeOptions() :
 	smartCodeProbability(90),			//spawn correct opcodes (with correct argument stack and reasonable arguments)
 	randomAddressProbability(10),		//probability of generating a random address instead of defined from list
 	emptyCodeProbability(2),			//probability of code being empty (empty code mean empty account)
-	emptyAddressProbability(2),		//probability of generating an empty address for transaction creation
-	precompiledAddressProbability(20)	//probability of generating a precompiled address in transaction or code calls
+	emptyAddressProbability(15),		//probability of generating an empty address for transaction creation
+	precompiledAddressProbability(15),	//probability of generating a precompiled address for calls
+	sendingAddressProbability(3),	// probability of calling to the tx sending account
+	precompiledDestProbability(2)	// probability of generating a precompiled address as tx destination
 {
 	//each op code with same weight-probability
 	for (auto i = 0; i < 255; i++)
@@ -481,7 +483,8 @@ RandomCodeOptions::RandomCodeOptions() :
 	setWeight(eth::Instruction::EXTCODESIZE, 170);
 
 	//some smart addresses for calls
-	addAddress(Address("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b"), AddressType::StateAccount);
+	//addAddress(Address("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b"), AddressType::StateAccount);
+	addAddress(Address("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b"), AddressType::SendingAccount);
 	addAddress(Address("0xffffffffffffffffffffffffffffffffffffffff"), AddressType::StateAccount);
 	addAddress(Address("0x1000000000000000000000000000000000000000"), AddressType::StateAccount);
 	addAddress(Address("0xb94f5374fce5edbc8e2a8697c15331677e6ebf0b"), AddressType::StateAccount);
@@ -512,6 +515,9 @@ void RandomCodeOptions::addAddress(Address const& _address, AddressType _type)
 		case AddressType::StateAccount:
 			stateAddressList.push_back(_address);
 			break;
+		case AddressType::SendingAccount:
+			sendingAddressList.push_back(_address);
+			break;
 		default:
 			BOOST_ERROR("RandomCodeOptions::addAddress: Unexpected AddressType!");
 		break;
@@ -526,11 +532,29 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 		case AddressType::Precompiled:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::Precompiled returning precompiledAddress\n");
 			return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
+		case AddressType::DestinationAddress:
+			printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress\n");
+			if (RandomCode::randomPercent() < emptyAddressProbability) {
+				printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress returning ZeroAddress");
+				return ZeroAddress;
+			}
+			if (test::RandomCode::randomPercent() < precompiledDestProbability) {
+				printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress returning precompiledAddress\n");
+				return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
+			}
+			else {
+				printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress returning stateAddress\n");
+				return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
+			}
 		case AddressType::PrecompiledOrStateOrCreate:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::PrecompiledOrStateOrCreate\n");
 			if (RandomCode::randomPercent() < emptyAddressProbability) {
 				printf("fuzzHelper.cpp getRandomAddress returning ZeroAddress");
 				return ZeroAddress;
+			}
+			if (RandomCode::randomPercent() < sendingAddressProbability) {
+				printf("fuzzHelper.cpp getRandomAddress returning sendingAddress");
+				return sendingAddressList[(int)RandomCode::randomUniInt(0, sendingAddressList.size())];
 			}
 			if (test::RandomCode::randomPercent() < precompiledAddressProbability) {
 				printf("fuzzHelper.cpp getRandomAddress returning precompiledAddress\n");

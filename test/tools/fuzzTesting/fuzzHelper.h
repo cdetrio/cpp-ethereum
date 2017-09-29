@@ -53,7 +53,9 @@ public:
 	enum AddressType{
 		Precompiled,
 		StateAccount,
+		SendingAccount,
 		PrecompiledOrStateOrCreate,
+		DestinationAddress,
 		All
 	};
 	RandomCodeOptions();
@@ -68,11 +70,14 @@ public:
 	int emptyCodeProbability;
 	int emptyAddressProbability;
 	int precompiledAddressProbability;
+	int precompiledDestProbability;
+	int sendingAddressProbability;
 
 private:
 	std::map<int, int> mapWeights;
 	std::vector<dev::Address> precompiledAddressList;
 	std::vector<dev::Address> stateAddressList;
+	std::vector<dev::Address> sendingAddressList;
 };
 
 enum class SizeStrictness
