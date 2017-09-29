@@ -345,7 +345,8 @@ std::string RandomCode::getPushCode(int _value)
 	return getPushCode(hexString);
 }
 
-std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOptions const& _options)
+//std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOptions const& _options)
+std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOptions& _options)
 {
 	eth::InstructionInfo info = eth::instructionInfo(_opcode);
 
