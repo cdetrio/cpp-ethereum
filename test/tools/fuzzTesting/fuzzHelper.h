@@ -55,7 +55,7 @@ public:
 		StateAccount,
 		SendingAccount,
 		PrecompiledOrStateOrCreate,
-		DestinationAddress,
+		DestinationAccount,
 		All
 	};
 	RandomCodeOptions();
@@ -78,6 +78,7 @@ private:
 	std::vector<dev::Address> precompiledAddressList;
 	std::vector<dev::Address> stateAddressList;
 	std::vector<dev::Address> sendingAddressList;
+	std::vector<dev::Address> destinationAddressList;
 };
 
 enum class SizeStrictness

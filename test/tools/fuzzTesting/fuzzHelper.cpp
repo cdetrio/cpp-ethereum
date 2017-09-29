@@ -518,6 +518,8 @@ void RandomCodeOptions::addAddress(Address const& _address, AddressType _type)
 		case AddressType::SendingAccount:
 			sendingAddressList.push_back(_address);
 			break;
+		case AddressType::StateAccount:
+			destinationAddressList.push_back(_address);
 		default:
 			BOOST_ERROR("RandomCodeOptions::addAddress: Unexpected AddressType!");
 		break;
@@ -561,8 +563,13 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 				return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
 			}
 			else {
-				printf("fuzzHelper.cpp getRandomAddress returning stateAddress\n");
-				return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
+				printf("fuzzHelper.cpp getRandomAddress returning destinationAddress\n");
+				if (destinationAddressList.size() == 0) {
+					return ZeroAddress;
+				} else {
+				//return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
+					return destinationAddressList[(int)RandomCode::randomUniInt(0, destinationAddressList.size())];
+				}
 			}
 		case AddressType::StateAccount:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::StateAccount returning stateAddress\n");
