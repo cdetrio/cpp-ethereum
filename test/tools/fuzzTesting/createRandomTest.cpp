@@ -33,6 +33,7 @@ namespace dev { namespace test {
 
 bool createRandomTest()
 {
+	printf("createRandomTest.cpp createRandomTest\n");
 	StateTestSuite suite;
 	dev::test::Options& options = const_cast<dev::test::Options&>(dev::test::Options::get());
 	if (options.rCurrentTestSuite != suite.suiteFolder())
@@ -42,6 +43,7 @@ bool createRandomTest()
 	}
 	else
 	{
+		printf("createRandomTest.cpp createRandomTest calling fillRandomTest\n");
 		RandomCodeOptions options;
 		TestOutputHelper testOutputHelper;
 		std::string test = test::RandomCode::fillRandomTest(suite, c_testExampleStateTest, options);
@@ -90,6 +92,7 @@ std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _t
 /// Parse Test string replacing keywords to fuzzed values
 void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions const& _options)
 {
+	printf("createRandomTest.cpp parseTestWithTypes\n");
 	std::vector<std::string> types = getTypes();
 
 	for (std::map<std::string, std::string>::const_iterator it = _varMap.begin(); it != _varMap.end(); it++)
@@ -134,14 +137,19 @@ void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std:
 				replace = test::RandomCode::randomUniIntHex(dev::u256("100000"), dev::u256("36028797018963967"));
 			else if (type == "[DESTADDRESS]")
 			{
+				printf("createRandomTest.cpp parseTestWithTypes type == [DESTADDRESS]\n");
 				Address address = _options.getRandomAddress(RandomCodeOptions::AddressType::PrecompiledOrStateOrCreate);
 				if (address != ZeroAddress) //else transaction creation
 					replace = "0x" + toString(address);
 			}
-			else if (type == "[ADDRESS]")
+			else if (type == "[ADDRESS]") {
+				printf("createRandomTest.cpp parseTestWithTypes type == [ADDRESS]\n");
 				replace = toString(_options.getRandomAddress(RandomCodeOptions::AddressType::StateAccount));
-			else if (type == "[0xADDRESS]")
+			}
+			else if (type == "[0xADDRESS]") {
+				printf("createRandomTest.cpp parseTestWithTypes type == [0xADDRESS]\n");
 				replace = "0x" + toString(_options.getRandomAddress(RandomCodeOptions::AddressType::StateAccount));
+			}
 			else if (type == "[TRANSACTIONGASLIMIT]")
 				replace = test::RandomCode::randomUniIntHex(dev::u256("5000"), dev::u256("10000000"));
 			else if (type == "[GASPRICE]")
