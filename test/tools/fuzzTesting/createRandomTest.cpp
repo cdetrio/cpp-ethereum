@@ -265,9 +265,8 @@ std::string const c_testExampleStateTest = R"(
 		],
 		"gasLimit" : [
 			"[TRANSACTIONGASLIMIT]",
-			"0",
-			"21000",
-			"60000"
+			"100000",
+			"300000"
 		],
 		"gasPrice" : "[GASPRICE]",
 		"nonce" : "0",
