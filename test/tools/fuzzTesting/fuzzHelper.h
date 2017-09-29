@@ -47,17 +47,18 @@ using IntDistrib = std::uniform_int_distribution<>;
 using DescreteDistrib = std::discrete_distribution<>;
 using IntGenerator = std::function<int()>;
 
+enum AddressType{
+	Precompiled,
+	StateAccount,
+	SendingAccount,
+	PrecompiledOrStateOrCreate,
+	DestinationAccount,
+	All
+};
+
 struct RandomCodeOptions
 {
 public:
-	enum AddressType{
-		Precompiled,
-		StateAccount,
-		SendingAccount,
-		PrecompiledOrStateOrCreate,
-		DestinationAccount,
-		All
-	};
 	RandomCodeOptions();
 	void setWeight(dev::eth::Instruction _opCode, int _weight);
 	void addAddress(dev::Address const& _address, AddressType _type);
