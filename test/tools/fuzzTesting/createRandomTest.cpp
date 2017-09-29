@@ -35,7 +35,8 @@ bool createRandomTest()
 {
 	printf("createRandomTest.cpp createRandomTest\n");
 	StateTestSuite suite;
-	dev::test::Options& options = const_cast<dev::test::Options&>(dev::test::Options::get());
+	//dev::test::Options& options = const_cast<dev::test::Options&>(dev::test::Options::get());
+	dev::test::Options& options = dev::test::Options::get();
 	if (options.rCurrentTestSuite != suite.suiteFolder())
 	{
 		std::cerr << "Error! Test suite '" + options.rCurrentTestSuite + "' not supported! (Usage -t <TestSuite>)\n";
@@ -54,7 +55,8 @@ bool createRandomTest()
 }} //namespaces
 
 //Prints a generated test Json into std::out
-std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _testSuite, std::string const& _testString, dev::test::RandomCodeOptions const& _options)
+//std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _testSuite, std::string const& _testString, dev::test::RandomCodeOptions const& _options)
+std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _testSuite, std::string const& _testString, dev::test::RandomCodeOptions _options)
 {
 	bool wasError = false;
 	json_spirit::mValue v;
@@ -90,7 +92,8 @@ std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _t
 }
 
 /// Parse Test string replacing keywords to fuzzed values
-void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions const& _options)
+//void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions const& _options)
+void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions _options)
 {
 	printf("createRandomTest.cpp parseTestWithTypes\n");
 	std::vector<std::string> types = getTypes();
