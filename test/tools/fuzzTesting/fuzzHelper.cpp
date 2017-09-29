@@ -518,7 +518,7 @@ void RandomCodeOptions::addAddress(Address const& _address, AddressType _type)
 		case AddressType::SendingAccount:
 			sendingAddressList.push_back(_address);
 			break;
-		case AddressType::StateAccount:
+		case AddressType::DestinationAccount:
 			destinationAddressList.push_back(_address);
 		default:
 			BOOST_ERROR("RandomCodeOptions::addAddress: Unexpected AddressType!");
