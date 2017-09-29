@@ -444,8 +444,8 @@ RandomCodeOptions::RandomCodeOptions() :
 	useUndefinedOpCodes(false),			//spawn undefined bytecodes in code
 	smartCodeProbability(90),			//spawn correct opcodes (with correct argument stack and reasonable arguments)
 	randomAddressProbability(10),		//probability of generating a random address instead of defined from list
-	emptyCodeProbability(20),			//probability of code being empty (empty code mean empty account)
-	emptyAddressProbability(40),		//probability of generating an empty address for transaction creation
+	emptyCodeProbability(2),			//probability of code being empty (empty code mean empty account)
+	emptyAddressProbability(2),		//probability of generating an empty address for transaction creation
 	precompiledAddressProbability(20)	//probability of generating a precompiled address in transaction or code calls
 {
 	//each op code with same weight-probability
