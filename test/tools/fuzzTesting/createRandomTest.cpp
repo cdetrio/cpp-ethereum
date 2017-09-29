@@ -35,8 +35,8 @@ bool createRandomTest()
 {
 	printf("createRandomTest.cpp createRandomTest\n");
 	StateTestSuite suite;
-	//dev::test::Options& options = const_cast<dev::test::Options&>(dev::test::Options::get());
-	dev::test::Options& options = dev::test::Options::get();
+	dev::test::Options& optionsConst = const_cast<dev::test::Options&>(dev::test::Options::get());
+	dev::test::Options& options = optionsConst;
 	if (options.rCurrentTestSuite != suite.suiteFolder())
 	{
 		std::cerr << "Error! Test suite '" + options.rCurrentTestSuite + "' not supported! (Usage -t <TestSuite>)\n";
@@ -56,7 +56,7 @@ bool createRandomTest()
 
 //Prints a generated test Json into std::out
 //std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _testSuite, std::string const& _testString, dev::test::RandomCodeOptions const& _options)
-std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _testSuite, std::string const& _testString, dev::test::RandomCodeOptions _options)
+std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _testSuite, std::string const& _testString, dev::test::RandomCodeOptions& _options)
 {
 	bool wasError = false;
 	json_spirit::mValue v;
