@@ -93,7 +93,7 @@ std::string dev::test::RandomCode::fillRandomTest(dev::test::TestSuite const& _t
 
 /// Parse Test string replacing keywords to fuzzed values
 //void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions const& _options)
-void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions _options)
+void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions& _options)
 {
 	printf("createRandomTest.cpp parseTestWithTypes\n");
 	std::vector<std::string> types = getTypes();
