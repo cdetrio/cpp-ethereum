@@ -451,8 +451,8 @@ RandomCodeOptions::RandomCodeOptions() :
 	emptyCodeProbability(2),			//probability of code being empty (empty code mean empty account)
 	emptyAddressProbability(15),		//probability of generating an empty address for transaction creation
 	precompiledAddressProbability(15),	//probability of generating a precompiled address for calls
-	sendingAddressProbability(3),	// probability of calling to the tx sending account
-	precompiledDestProbability(2)	// probability of generating a precompiled address as tx destination
+	precompiledDestProbability(2),	// probability of generating a precompiled address as tx destination
+	sendingAddressProbability(3)	// probability of calling to the tx sending account
 {
 	//each op code with same weight-probability
 	for (auto i = 0; i < 255; i++)
