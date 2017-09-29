@@ -254,7 +254,8 @@ std::string RandomCode::rndByteSequence(int _length, SizeStrictness _sizeType)
 }
 
 //generate smart random code
-std::string RandomCode::generate(int _maxOpNumber, RandomCodeOptions const& _options)
+//std::string RandomCode::generate(int _maxOpNumber, RandomCodeOptions const& _options)
+std::string RandomCode::generate(int _maxOpNumber, RandomCodeOptions _options)
 {
 	refreshSeed();
 	std::string code;

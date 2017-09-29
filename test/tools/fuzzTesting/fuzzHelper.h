@@ -100,7 +100,8 @@ public:
 	static std::string generate(int _maxOpNumber, RandomCodeOptions const& _options);
 
 	/// Replace keywords in given string with values
-	static void parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions const& _options);
+	//static void parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions const& _options);
+	static void parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap, RandomCodeOptions _options);
 	static void parseTestWithTypes(std::string& _test, std::map<std::string, std::string> const& _varMap)
 	{
 		RandomCodeOptions defaultOptions;
