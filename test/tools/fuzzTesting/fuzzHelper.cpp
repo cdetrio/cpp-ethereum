@@ -534,7 +534,7 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 		case AddressType::Precompiled:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::Precompiled returning precompiledAddress\n");
 			return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
-		case AddressType::DestinationAddress:
+		case AddressType::DestinationAccount:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress\n");
 			if (RandomCode::randomPercent() < emptyAddressProbability) {
 				printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress returning ZeroAddress");
@@ -545,8 +545,12 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 				return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
 			}
 			else {
-				printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress returning stateAddress\n");
-				return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
+				printf("fuzzHelper.cpp getRandomAddress returning destinationAddress\n");
+				if (destinationAddressList.size() == 0) {
+					return ZeroAddress;
+				} else {
+					return destinationAddressList[(int)RandomCode::randomUniInt(0, destinationAddressList.size())];
+				}
 			}
 		case AddressType::PrecompiledOrStateOrCreate:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::PrecompiledOrStateOrCreate\n");
@@ -563,13 +567,8 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 				return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
 			}
 			else {
-				printf("fuzzHelper.cpp getRandomAddress returning destinationAddress\n");
-				if (destinationAddressList.size() == 0) {
-					return ZeroAddress;
-				} else {
-				//return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
-					return destinationAddressList[(int)RandomCode::randomUniInt(0, destinationAddressList.size())];
-				}
+				printf("fuzzHelper.cpp getRandomAddress returning stateAddress\n");
+				return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
 			}
 		case AddressType::StateAccount:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::StateAccount returning stateAddress\n");

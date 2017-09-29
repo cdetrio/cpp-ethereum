@@ -138,7 +138,7 @@ void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std:
 			else if (type == "[DESTADDRESS]")
 			{
 				printf("createRandomTest.cpp parseTestWithTypes type == [DESTADDRESS]\n");
-				Address address = _options.getRandomAddress(RandomCodeOptions::AddressType::PrecompiledOrStateOrCreate);
+				Address address = _options.getRandomAddress(RandomCodeOptions::AddressType::DestinationAccount);
 				if (address != ZeroAddress) //else transaction creation
 					replace = "0x" + toString(address);
 			}
