@@ -527,7 +527,7 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::Precompiled returning precompiledAddress\n");
 			return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
 		case AddressType::PrecompiledOrStateOrCreate:
-			printf("fuzzHelper.cpp getRandomAddress case AddressType::PrecompiledOrStateOrCreate returning ZeroAddress\n");
+			printf("fuzzHelper.cpp getRandomAddress case AddressType::PrecompiledOrStateOrCreate\n");
 			if (RandomCode::randomPercent() < emptyAddressProbability) {
 				printf("fuzzHelper.cpp getRandomAddress returning ZeroAddress");
 				return ZeroAddress;

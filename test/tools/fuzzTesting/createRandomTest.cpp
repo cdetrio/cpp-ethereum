@@ -151,7 +151,7 @@ void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std:
 				replace = "0x" + toString(_options.getRandomAddress(RandomCodeOptions::AddressType::StateAccount));
 			}
 			else if (type == "[TRANSACTIONGASLIMIT]")
-				replace = test::RandomCode::randomUniIntHex(dev::u256("5000"), dev::u256("10000000"));
+				replace = test::RandomCode::randomUniIntHex(dev::u256("25000"), dev::u256("10000000"));
 			else if (type == "[GASPRICE]")
 				replace = test::RandomCode::randomUniIntHex(0, dev::u256("10"));
 			else
