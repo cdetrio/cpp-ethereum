@@ -146,7 +146,7 @@ void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std:
 				printf("createRandomTest.cpp parseTestWithTypes type == [ADDRESS]\n");
 				//addAddress(Address("0xd94f5374fce5edbc8e2a8697c15331677e6ebf0b"), AddressType::StateAccount);
 				Address destAddress = _options.getRandomAddress(RandomCodeOptions::AddressType::StateAccount);
-				addAddress(destAddress, AddressType::DestinationAccount);
+				addAddress(destAddress, RandomCodeOptions::AddressType::DestinationAccount);
 				replace = toString(destAddress);
 			}
 			else if (type == "[0xADDRESS]") {
