@@ -152,6 +152,7 @@ private:
 	static IntDistrib percentDist;			///< 0..100 percent
 	static IntDistrib opLengDist;			///< 1..32  byte string
 	static IntDistrib opMemrDist;			///< 1..10MB  byte string
+	static IntDistrib opSmallMemrDist; // 0..1kb
 	static IntDistrib uniIntDist;			///< 0..0x7fffffff
 
 	static IntGenerator randUniIntGen;		///< Generate random UniformInt from uniIntDist
