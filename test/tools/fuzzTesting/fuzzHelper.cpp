@@ -509,7 +509,7 @@ void RandomCodeOptions::setWeight(eth::Instruction _opCode, int _weight)
 
 void RandomCodeOptions::addAddress(Address const& _address, AddressType _type)
 {
-	printf("fuzzHelper.cpp addAddress.\n");
+	printf("fuzzHelper.cpp addAddress. type: %d\n", _type);
 	switch(_type)
 	{
 		case AddressType::Precompiled:
@@ -524,6 +524,7 @@ void RandomCodeOptions::addAddress(Address const& _address, AddressType _type)
 		case AddressType::DestinationAccount:
 			printf("fuzzHelper.cpp adding to destinationAddressList.\n");
 			destinationAddressList.push_back(_address);
+			break;
 		default:
 			BOOST_ERROR("RandomCodeOptions::addAddress: Unexpected AddressType!");
 		break;
@@ -541,7 +542,7 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 		case AddressType::DestinationAccount:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress\n");
 			if (RandomCode::randomPercent() < emptyAddressProbability) {
-				printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress returning ZeroAddress");
+				printf("fuzzHelper.cpp getRandomAddress case AddressType::DestinationAddress returning ZeroAddress\n");
 				return ZeroAddress;
 			}
 			if (test::RandomCode::randomPercent() < precompiledDestProbability) {
