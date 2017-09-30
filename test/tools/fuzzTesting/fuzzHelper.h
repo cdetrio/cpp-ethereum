@@ -159,6 +159,7 @@ private:
 	static IntGenerator randOpCodeGen;		///< Generate random value from opCodeDist
 	static IntGenerator randOpLengGen;		///< Generate random length from opLengDist
 	static IntGenerator randOpMemrGen;		///< Generate random length from opMemrDist
+	static IntGenerator randoOpSmallMemrGen;		///< Generate random length from opSmallMemrDist
 };
 
 }

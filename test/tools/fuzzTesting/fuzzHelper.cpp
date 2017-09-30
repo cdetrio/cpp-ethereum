@@ -94,7 +94,7 @@ IntDistrib RandomCode::uniIntDist = IntDistrib (0, 0x7fffffff);
 IntGenerator RandomCode::randOpCodeGen = std::bind(opCodeDist, gen);
 IntGenerator RandomCode::randOpLengGen = std::bind(opLengDist, gen);
 IntGenerator RandomCode::randOpMemrGen = std::bind(opMemrDist, gen);
-IntGenerator RandomCode::opSmallMemrDist = std::bind(opSmallMemrDist, gen);
+IntGenerator RandomCode::randoOpSmallMemrGen = std::bind(opSmallMemrDist, gen);
 IntGenerator RandomCode::randUniIntGen = std::bind(uniIntDist, gen);
 
 int RandomCode::recursiveRLP(std::string& _result, int _depth, std::string& _debug)
@@ -391,9 +391,9 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			return code;
 		// case eth::Instruction::RETURNDATASIZE:  // returndatasize takes no args
 		case eth::Instruction::RETURNDATACOPY:  //(REVERT memlen1 memlen2)
-			code += getPushCode(opSmallMemrDist());	// memory position
-			code += getPushCode(opSmallMemrDist());	// returndata position
-			code += getPushCode(opSmallMemrDist());	// size/num of bytes to copy
+			code += getPushCode(randoOpSmallMemrGen());	// memory position
+			code += getPushCode(randoOpSmallMemrGen());	// returndata position
+			code += getPushCode(randoOpSmallMemrGen());	// size/num of bytes to copy
 			return code;
 		case eth::Instruction::EXTCODECOPY:
 			code += getPushCode(randOpMemrGen());	//memstart2
@@ -406,8 +406,8 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			return code;
 		case eth::Instruction::CREATE:
 			//(CREATE value mem1 mem2)
-			code += getPushCode(opSmallMemrDist());	//memlen1
-			code += getPushCode(opSmallMemrDist());	//memlen1
+			code += getPushCode(randoOpSmallMemrGen());	//memlen1
+			code += getPushCode(randoOpSmallMemrGen());	//memlen1
 			code += getPushCode(randUniIntGen());	//value
 			return code;
 		case eth::Instruction::CALL:
@@ -415,10 +415,10 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			printf("fuzzHelper.cpp RandomCode::fillArguments CALL or CALLCODE. getting random address..\n");
 			//(CALL gaslimit address value memstart1 memlen1 memstart2 memlen2)
 			//(CALLCODE gaslimit address value memstart1 memlen1 memstart2 memlen2)
-			code += getPushCode(opSmallMemrDist());	//memlen2
-			code += getPushCode(opSmallMemrDist());	//memstart2
-			code += getPushCode(opSmallMemrDist());	//memlen1
-			code += getPushCode(opSmallMemrDist());	//memstart1
+			code += getPushCode(randoOpSmallMemrGen());	//memlen2
+			code += getPushCode(randoOpSmallMemrGen());	//memstart2
+			code += getPushCode(randoOpSmallMemrGen());	//memlen1
+			code += getPushCode(randoOpSmallMemrGen());	//memstart1
 			code += getPushCode(randUniIntGen());	//value
 			code += getPushCode(toString(_options.getRandomAddress(RandomCodeOptions::AddressType::CallAccount)));//address
 			code += getPushCode(randUniIntGen());	//gaslimit
@@ -427,10 +427,10 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 		case eth::Instruction::DELEGATECALL:
 			//(CALL gaslimit address value memstart1 memlen1 memstart2 memlen2)
 			//(CALLCODE gaslimit address value memstart1 memlen1 memstart2 memlen2)
-			code += getPushCode(opSmallMemrDist());	//memlen2
-			code += getPushCode(opSmallMemrDist());	//memstart2
-			code += getPushCode(opSmallMemrDist());	//memlen1
-			code += getPushCode(opSmallMemrDist());	//memstart1
+			code += getPushCode(randoOpSmallMemrGen());	//memlen2
+			code += getPushCode(randoOpSmallMemrGen());	//memstart2
+			code += getPushCode(randoOpSmallMemrGen());	//memlen1
+			code += getPushCode(randoOpSmallMemrGen());	//memstart1
 			code += getPushCode(toString(_options.getRandomAddress(RandomCodeOptions::AddressType::CallAccount)));//address
 			code += getPushCode(randUniIntGen());	//gaslimit
 			return code;
@@ -439,8 +439,8 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			return code;
 		case eth::Instruction::RETURN:  //(RETURN memlen1 memlen2)
 		case eth::Instruction::REVERT:  //(REVERT memlen1 memlen2)
-			code += getPushCode(opSmallMemrDist());	//memlen1
-			code += getPushCode(opSmallMemrDist());	//memlen1
+			code += getPushCode(randoOpSmallMemrGen());	//memlen1
+			code += getPushCode(randoOpSmallMemrGen());	//memlen1
 			return code;
 		default:
 			break;
