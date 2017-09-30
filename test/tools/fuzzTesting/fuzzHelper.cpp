@@ -86,6 +86,7 @@ std::mt19937_64 RandomCode::gen;
 IntDistrib RandomCode::percentDist = IntDistrib (0, 100);
 IntDistrib RandomCode::opCodeDist = IntDistrib (0, 255);
 IntDistrib RandomCode::opLengDist = IntDistrib (1, 32);
+// IntDistrib RandomCode::memSizeDist = IntDistrib (0, 10485760); TODO: more sophisticated distribution for returndatacopy size
 IntDistrib RandomCode::opMemrDist = IntDistrib (0, 10485760);
 IntDistrib RandomCode::uniIntDist = IntDistrib (0, 0x7fffffff);
 
@@ -386,6 +387,12 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			code += getPushCode(rndByteSequence(randOpLengGen()));	//code
 			code += getPushCode(randOpMemrGen());					//index
 			return code;
+		// case eth::Instruction::RETURNDATASIZE:  // returndatasize takes no args
+		case eth::Instruction::RETURNDATACOPY:  //(REVERT memlen1 memlen2)
+			code += getPushCode(randOpMemrGen());	// memory position
+			code += getPushCode(randOpMemrGen());	// returndata position
+			code += getPushCode(randOpMemrGen());	// size/num of bytes to copy
+			return code;
 		case eth::Instruction::EXTCODECOPY:
 			code += getPushCode(randOpMemrGen());	//memstart2
 			code += getPushCode(randOpMemrGen());	//memlen1
@@ -403,6 +410,7 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			return code;
 		case eth::Instruction::CALL:
 		case eth::Instruction::CALLCODE:
+			printf("fuzzHelper.cpp RandomCode::fillArguments CALL or CALLCODE. getting random address..\n");
 			//(CALL gaslimit address value memstart1 memlen1 memstart2 memlen2)
 			//(CALLCODE gaslimit address value memstart1 memlen1 memstart2 memlen2)
 			code += getPushCode(randOpMemrGen());	//memlen2
@@ -410,7 +418,7 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			code += getPushCode(randOpMemrGen());	//memlen1
 			code += getPushCode(randOpMemrGen());	//memstart1
 			code += getPushCode(randUniIntGen());	//value
-			code += getPushCode(toString(_options.getRandomAddress()));//address
+			code += getPushCode(toString(_options.getRandomAddress(AddressType::CallAccount)));//address
 			code += getPushCode(randUniIntGen());	//gaslimit
 			return code;
 		case eth::Instruction::STATICCALL:
@@ -421,7 +429,7 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			code += getPushCode(randOpMemrGen());	//memstart2
 			code += getPushCode(randOpMemrGen());	//memlen1
 			code += getPushCode(randOpMemrGen());	//memstart1
-			code += getPushCode(toString(_options.getRandomAddress()));//address
+			code += getPushCode(toString(_options.getRandomAddress(AddressType::CallAccount)));//address
 			code += getPushCode(randUniIntGen());	//gaslimit
 			return code;
 		case eth::Instruction::SUICIDE: //(SUICIDE address)
@@ -448,11 +456,12 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 //Default Random Code Options
 RandomCodeOptions::RandomCodeOptions() :
 	useUndefinedOpCodes(false),			//spawn undefined bytecodes in code
-	smartCodeProbability(90),			//spawn correct opcodes (with correct argument stack and reasonable arguments)
-	randomAddressProbability(10),		//probability of generating a random address instead of defined from list
+	smartCodeProbability(93),			//spawn correct opcodes (with correct argument stack and reasonable arguments)
+	randomAddressProbability(3),		//probability of generating a random address instead of defined from list
 	emptyCodeProbability(2),			//probability of code being empty (empty code mean empty account)
 	emptyAddressProbability(15),		//probability of generating an empty address for transaction creation
-	precompiledAddressProbability(15),	//probability of generating a precompiled address for calls
+	precompiledAddressProbability(5),	//probability of generating a precompiled address for calls
+	byzPrecompiledAddressProbability(10),	//probability of generating a precompiled address for calls
 	precompiledDestProbability(2),	// probability of generating a precompiled address as tx destination
 	sendingAddressProbability(3)	// probability of calling to the tx sending account
 {
@@ -481,8 +490,13 @@ RandomCodeOptions::RandomCodeOptions() :
 	setWeight(eth::Instruction::CALLCODE, 170);
 	setWeight(eth::Instruction::DELEGATECALL, 170);
 	setWeight(eth::Instruction::STATICCALL, 170);
-	setWeight(eth::Instruction::EXTCODECOPY, 170);
-	setWeight(eth::Instruction::EXTCODESIZE, 170);
+	setWeight(eth::Instruction::CREATE, 250);
+	//setWeight(eth::Instruction::EXTCODECOPY, 40);
+	//setWeight(eth::Instruction::EXTCODESIZE, 40);
+	
+	setWeight(eth::Instruction::RETURNDATASIZE, 500);
+	setWeight(eth::Instruction::RETURNDATACOPY, 500);
+	setWeight(eth::Instruction::REVERT, 500);
 
 	//some smart addresses for calls
 	//addAddress(Address("0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b"), AddressType::StateAccount);
@@ -500,6 +514,10 @@ RandomCodeOptions::RandomCodeOptions() :
 	addAddress(Address("0x0000000000000000000000000000000000000006"), AddressType::Precompiled);
 	addAddress(Address("0x0000000000000000000000000000000000000007"), AddressType::Precompiled);
 	addAddress(Address("0x0000000000000000000000000000000000000008"), AddressType::Precompiled);
+	addAddress(Address("0x0000000000000000000000000000000000000005"), AddressType::ByzantiumPrecompiled);
+	addAddress(Address("0x0000000000000000000000000000000000000006"), AddressType::ByzantiumPrecompiled);
+	addAddress(Address("0x0000000000000000000000000000000000000007"), AddressType::ByzantiumPrecompiled);
+	addAddress(Address("0x0000000000000000000000000000000000000008"), AddressType::ByzantiumPrecompiled);
 }
 
 void RandomCodeOptions::setWeight(eth::Instruction _opCode, int _weight)
@@ -514,6 +532,10 @@ void RandomCodeOptions::addAddress(Address const& _address, AddressType _type)
 	{
 		case AddressType::Precompiled:
 			precompiledAddressList.push_back(_address);
+			break;
+		case AddressType::ByzantiumPrecompiled:
+			printf("fuzzHelper.cpp adding to byzPrecompiledAddressList.\n");
+			byzPrecompiledAddressList.push_back(_address);
 			break;
 		case AddressType::StateAccount:
 			stateAddressList.push_back(_address);
@@ -533,7 +555,7 @@ void RandomCodeOptions::addAddress(Address const& _address, AddressType _type)
 
 Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 {
-	printf("fuzzHelper.cpp getRandomAddress\n");
+	printf("fuzzHelper.cpp getRandomAddress. address type: %d\n", _type);
 	switch(_type)
 	{
 		case AddressType::Precompiled:
@@ -576,8 +598,31 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 				return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
 			}
 		case AddressType::StateAccount:
-			printf("fuzzHelper.cpp getRandomAddress case AddressType::StateAccount returning stateAddress\n");
+			printf("fuzzHelper.cpp getRandomAddress case StateAccount returning stateAddress\n");
 			return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
+		case AddressType::CallAccount:
+			printf("fuzzHelper.cpp getRandomAddress case CallAccount\n");
+			//if not random address then chose from both lists
+			if (test::RandomCode::randomPercent() > randomAddressProbability)
+			{
+				printf("fuzzHelper.cpp getRandomAddress got > randomAddressProbability\n");
+				if (test::RandomCode::randomPercent() < byzPrecompiledAddressProbability) {
+					printf("fuzzHelper.cpp getRandomAddress returning ByzantiumPrecompiled\n");
+					return byzPrecompiledAddressList[(int)RandomCode::randomUniInt(0, byzPrecompiledAddressList.size())];
+				}
+				if (test::RandomCode::randomPercent() < precompiledAddressProbability) {
+					printf("fuzzHelper.cpp getRandomAddress returning precompiledAddress\n");
+					return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
+				}
+				else {
+					printf("fuzzHelper.cpp getRandomAddress returning stateAddress\n");
+					return stateAddressList[(int)RandomCode::randomUniInt(0, stateAddressList.size())];
+				}
+			}
+			else {
+				printf("fuzzHelper.cpp getRandomAddress got < randomAddressProbability\n");
+				return Address(RandomCode::rndByteSequence(20));
+			}
 		case AddressType::All:
 			printf("fuzzHelper.cpp getRandomAddress case AddressType::All\n");
 			//if not random address then chose from both lists
@@ -598,6 +643,7 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 				return Address(RandomCode::rndByteSequence(20));
 			}
 		default:
+			printf("fuzzHelper.cpp getRandomAddress got Unexpected AddressType!\n");
 			BOOST_ERROR("RandomCodeOptions::getRandomAddress: Unexpected AddressType!");
 			return ZeroAddress;
 	}

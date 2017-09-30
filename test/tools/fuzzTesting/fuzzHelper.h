@@ -52,10 +52,12 @@ struct RandomCodeOptions
 public:
 	enum AddressType{
 		Precompiled,
+		ByzantiumPrecompiled,
 		StateAccount,
 		SendingAccount,
 		PrecompiledOrStateOrCreate,
 		DestinationAccount,
+		CallAccount,
 		All
 	};
 	RandomCodeOptions();
@@ -70,12 +72,14 @@ public:
 	int emptyCodeProbability;
 	int emptyAddressProbability;
 	int precompiledAddressProbability;
+	int byzPrecompiledAddressProbability;
 	int precompiledDestProbability;
 	int sendingAddressProbability;
 
 private:
 	std::map<int, int> mapWeights;
 	std::vector<dev::Address> precompiledAddressList;
+	std::vector<dev::Address> byzPrecompiledAddressList;
 	std::vector<dev::Address> stateAddressList;
 	std::vector<dev::Address> sendingAddressList;
 	std::vector<dev::Address> destinationAddressList;

@@ -115,7 +115,7 @@ void dev::test::RandomCode::parseTestWithTypes(std::string& _test, std::map<std:
 				cnote << debug;
 			}
 			else if (type == "[CODE]")
-				replace = dev::test::RandomCode::generate(10, _options);
+				replace = dev::test::RandomCode::generate(50, _options);
 			else if (type == "[HEX]")
 				replace = dev::test::RandomCode::randomUniIntHex();
 			else if (type == "[HEX32]")
@@ -272,8 +272,8 @@ std::string const c_testExampleStateTest = R"(
 		],
 		"gasLimit" : [
 			"[TRANSACTIONGASLIMIT]",
-			"100000",
-			"300000"
+			"1000000",
+			"3000000"
 		],
 		"gasPrice" : "[GASPRICE]",
 		"nonce" : "0",
