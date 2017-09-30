@@ -387,7 +387,7 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 		{
 		case eth::Instruction::MSTORE:
 			code += getPushCode(rndByteSequence(randOpLengGen()));	//code
-			code += getPushCode(opSmallMemrDist());					//index
+			code += getPushCode(randoOpSmallMemrGen());					//index
 			return code;
 		// case eth::Instruction::RETURNDATASIZE:  // returndatasize takes no args
 		case eth::Instruction::RETURNDATACOPY:  //(REVERT memlen1 memlen2)
