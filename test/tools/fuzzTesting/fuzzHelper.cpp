@@ -94,6 +94,7 @@ IntDistrib RandomCode::uniIntDist = IntDistrib (0, 0x7fffffff);
 IntGenerator RandomCode::randOpCodeGen = std::bind(opCodeDist, gen);
 IntGenerator RandomCode::randOpLengGen = std::bind(opLengDist, gen);
 IntGenerator RandomCode::randOpMemrGen = std::bind(opMemrDist, gen);
+IntGenerator RandomCode::opSmallMemrDist = std::bind(opSmallMemrDist, gen);
 IntGenerator RandomCode::randUniIntGen = std::bind(uniIntDist, gen);
 
 int RandomCode::recursiveRLP(std::string& _result, int _depth, std::string& _debug)
