@@ -418,7 +418,7 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			code += getPushCode(randOpMemrGen());	//memlen1
 			code += getPushCode(randOpMemrGen());	//memstart1
 			code += getPushCode(randUniIntGen());	//value
-			code += getPushCode(toString(_options.getRandomAddress(AddressType::CallAccount)));//address
+			code += getPushCode(toString(_options.getRandomAddress(RandomCodeOptions::AddressType::CallAccount)));//address
 			code += getPushCode(randUniIntGen());	//gaslimit
 			return code;
 		case eth::Instruction::STATICCALL:
@@ -429,7 +429,7 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 			code += getPushCode(randOpMemrGen());	//memstart2
 			code += getPushCode(randOpMemrGen());	//memlen1
 			code += getPushCode(randOpMemrGen());	//memstart1
-			code += getPushCode(toString(_options.getRandomAddress(AddressType::CallAccount)));//address
+			code += getPushCode(toString(_options.getRandomAddress(RandomCodeOptions::AddressType::CallAccount)));//address
 			code += getPushCode(randUniIntGen());	//gaslimit
 			return code;
 		case eth::Instruction::SUICIDE: //(SUICIDE address)
