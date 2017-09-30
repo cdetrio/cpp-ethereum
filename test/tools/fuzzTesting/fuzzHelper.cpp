@@ -549,7 +549,7 @@ Address RandomCodeOptions::getRandomAddress(AddressType _type) const
 				return precompiledAddressList[(int)RandomCode::randomUniInt(0, precompiledAddressList.size())];
 			}
 			else {
-				printf("fuzzHelper.cpp getRandomAddress returning destinationAddress. destinationAddressList.size(): %d\n", destinationAddressList.size());
+				printf("fuzzHelper.cpp getRandomAddress returning destinationAddress. destinationAddressList.size(): %lu\n", destinationAddressList.size());
 				if (destinationAddressList.size() == 0) {
 					return ZeroAddress;
 				} else {
