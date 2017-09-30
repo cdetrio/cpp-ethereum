@@ -456,7 +456,7 @@ std::string RandomCode::fillArguments(eth::Instruction _opcode, RandomCodeOption
 //Default Random Code Options
 RandomCodeOptions::RandomCodeOptions() :
 	useUndefinedOpCodes(false),			//spawn undefined bytecodes in code
-	smartCodeProbability(93),			//spawn correct opcodes (with correct argument stack and reasonable arguments)
+	smartCodeProbability(99),			//spawn correct opcodes (with correct argument stack and reasonable arguments)
 	randomAddressProbability(3),		//probability of generating a random address instead of defined from list
 	emptyCodeProbability(2),			//probability of code being empty (empty code mean empty account)
 	emptyAddressProbability(15),		//probability of generating an empty address for transaction creation
@@ -486,11 +486,11 @@ RandomCodeOptions::RandomCodeOptions() :
 	setWeight(eth::Instruction::MSTORE, 400);
 	setWeight(eth::Instruction::MSTORE8, 400);
 	setWeight(eth::Instruction::SSTORE, 170);
-	setWeight(eth::Instruction::CALL, 170);
+	setWeight(eth::Instruction::CALL, 350);
 	setWeight(eth::Instruction::CALLCODE, 170);
-	setWeight(eth::Instruction::DELEGATECALL, 170);
-	setWeight(eth::Instruction::STATICCALL, 170);
-	setWeight(eth::Instruction::CREATE, 250);
+	setWeight(eth::Instruction::DELEGATECALL, 300);
+	setWeight(eth::Instruction::STATICCALL, 300);
+	setWeight(eth::Instruction::CREATE, 350);
 	//setWeight(eth::Instruction::EXTCODECOPY, 40);
 	//setWeight(eth::Instruction::EXTCODESIZE, 40);
 	
