@@ -191,8 +191,8 @@ std::vector<std::string> dev::test::RandomCode::getTypes()
 		"[0xHASH32]",			//Random hash string 0x...  32 byte length
 		"[V]",					//Random V value for transaction sig. could be invalid.
 		"[BLOCKGASLIMIT]",		//Random block gas limit with max of 2**55-1
-		"[DESTADDRESS]",		//Random destination address for transaction (could be empty string)
 		"[ADDRESS]",			//Random account address
+		"[DESTADDRESS]",		//Random destination address for transaction (could be empty string)
 		"[0xADDRESS]",			//Random account address
 		"[TRANSACTIONGASLIMIT]", //Random reasonable gas limit for a transaction
 		"[GASPRICE]"			//Random reasonable gas price for transaction (could be 0)
