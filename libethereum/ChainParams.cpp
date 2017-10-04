@@ -162,12 +162,13 @@ string const c_gasLimit = "gasLimit";
 string const c_gasUsed = "gasUsed";
 string const c_timestamp = "timestamp";
 string const c_extraData = "extraData";
+string const c_bloom = "bloom";
 string const c_mixHash = "mixHash";
 string const c_nonce = "nonce";
 
 set<string> const c_knownGenesisFields = {
 	c_parentHash, c_coinbase, c_author, c_difficulty, c_gasLimit, c_gasUsed, c_timestamp,
-	c_extraData, c_mixHash, c_nonce
+	c_extraData, c_bloom, c_mixHash, c_nonce
 };
 }
 
