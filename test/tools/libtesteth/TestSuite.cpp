@@ -130,18 +130,6 @@ void TestSuite::executeTest(string const& _testFolder, fs::path const& _jsonFile
 {
 	fs::path const boostRelativeTestPath = fs::relative(_jsonFileName, getTestPath());
 	string testname = _jsonFileName.stem().string();
-	/*
-	bool isCopySource = false;
-	if (testname.rfind(c_fillerPostf) != string::npos)
-		testname = testname.substr(0, testname.rfind("Filler"));
-	else if (testname.rfind(c_copierPostf) != string::npos)
-	{
-		testname = testname.substr(0, testname.rfind(c_copierPostf));
-		isCopySource = true;
-	}
-	else
-		BOOST_REQUIRE_MESSAGE(false, "Incorrect file suffix in the filler folder! " + _jsonFileName.string());
-	*/
 
 	// Filename of the test that would be generated
 	fs::path boostTestPath = getFullPath(_testFolder) / fs::path(testname + ".json");
@@ -152,6 +140,17 @@ void TestSuite::executeTest(string const& _testFolder, fs::path const& _jsonFile
 
 	if (Options::get().filltests)
 	{
+		bool isCopySource = false;
+		if (testname.rfind(c_fillerPostf) != string::npos)
+			testname = testname.substr(0, testname.rfind("Filler"));
+		else if (testname.rfind(c_copierPostf) != string::npos)
+		{
+			testname = testname.substr(0, testname.rfind(c_copierPostf));
+			isCopySource = true;
+		}
+		else
+			BOOST_REQUIRE_MESSAGE(false, "Incorrect file suffix in the filler folder! " + _jsonFileName.string());
+
 		if (isCopySource)
 		{
 			clog << "Copying " << _jsonFileName.string() << "\n";
