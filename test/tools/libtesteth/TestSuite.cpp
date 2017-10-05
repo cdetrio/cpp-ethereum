@@ -94,14 +94,17 @@ void TestSuite::runAllTestsInFolder(string const& _testFolder) const
 	vector<fs::path> const compiledFiles = test::getJsonFiles(getFullPath(_testFolder));
 	for (auto const& file: compiledFiles)
 	{
+		/*
 		fs::path const expectedFillerName = getFullPathFiller(_testFolder) / fs::path(file.stem().string() + c_fillerPostf + ".json");
 		fs::path const expectedCopierName = getFullPathFiller(_testFolder) / fs::path(file.stem().string() + c_copierPostf + ".json");
 		BOOST_REQUIRE_MESSAGE(fs::exists(expectedFillerName) || fs::exists(expectedCopierName), "Compiled test folder contains test without Filler: " + file.filename().string());
 		BOOST_REQUIRE_MESSAGE(!(fs::exists(expectedFillerName) && fs::exists(expectedCopierName)), "Src test could either be Filler.json or Copier.json: " + file.filename().string());
+		*/
 	}
 
 	string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName + "Filler";
-	vector<fs::path> const files = test::getJsonFiles(getFullPathFiller(_testFolder).string(), filter);
+	//vector<fs::path> const files = test::getJsonFiles(getFullPathFiller(_testFolder).string(), filter);
+	vector<fs::path> const files = test::getJsonFiles(getFullPath(_testFolder).string(), filter);
 
 	auto testOutput = dev::test::TestOutputHelper(files.size());
 	for (auto const& file: files)
