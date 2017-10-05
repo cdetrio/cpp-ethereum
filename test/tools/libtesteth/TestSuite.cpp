@@ -103,8 +103,8 @@ void TestSuite::runAllTestsInFolder(string const& _testFolder) const
 	*/
 
 	//string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName + "Filler";
-	string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName;
 	//vector<fs::path> const files = test::getJsonFiles(getFullPathFiller(_testFolder).string(), filter);
+	string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName;
 	vector<fs::path> const files = test::getJsonFiles(getFullPath(_testFolder).string(), filter);
 
 	auto testOutput = dev::test::TestOutputHelper(files.size());
@@ -130,6 +130,7 @@ void TestSuite::executeTest(string const& _testFolder, fs::path const& _jsonFile
 {
 	fs::path const boostRelativeTestPath = fs::relative(_jsonFileName, getTestPath());
 	string testname = _jsonFileName.stem().string();
+	/*
 	bool isCopySource = false;
 	if (testname.rfind(c_fillerPostf) != string::npos)
 		testname = testname.substr(0, testname.rfind("Filler"));
@@ -140,6 +141,7 @@ void TestSuite::executeTest(string const& _testFolder, fs::path const& _jsonFile
 	}
 	else
 		BOOST_REQUIRE_MESSAGE(false, "Incorrect file suffix in the filler folder! " + _jsonFileName.string());
+	*/
 
 	// Filename of the test that would be generated
 	fs::path boostTestPath = getFullPath(_testFolder) / fs::path(testname + ".json");
