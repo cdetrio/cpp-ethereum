@@ -102,7 +102,8 @@ void TestSuite::runAllTestsInFolder(string const& _testFolder) const
 	}
 	*/
 
-	string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName + "Filler";
+	//string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName + "Filler";
+	string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName;
 	//vector<fs::path> const files = test::getJsonFiles(getFullPathFiller(_testFolder).string(), filter);
 	vector<fs::path> const files = test::getJsonFiles(getFullPath(_testFolder).string(), filter);
 
