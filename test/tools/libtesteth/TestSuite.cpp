@@ -111,6 +111,7 @@ string const c_copierPostf = "Copier";
 
 void TestSuite::runTestWithoutFiller(boost::filesystem::path const& _file) const
 {
+	cerr << "TestSuite.cpp runTestWithoutFiller" << endl;
 	// Allow to execute a custom test .json file on any test suite
 	auto& testOutput = test::TestOutputHelper::get();
 	testOutput.initTest(1);
@@ -120,6 +121,7 @@ void TestSuite::runTestWithoutFiller(boost::filesystem::path const& _file) const
 
 void TestSuite::runAllTestsInFolder(string const& _testFolder) const
 {
+	cerr << "TestSuite.cpp runAllTestsInFolder" << endl;
 	// check that destination folder test files has according Filler file in src folder
 	string const filter = test::Options::get().singleTestName.empty() ? string() : test::Options::get().singleTestName;
 	vector<fs::path> const compiledFiles = test::getFiles(getFullPath(_testFolder), {".json", ".yml"} ,filter);
@@ -169,6 +171,7 @@ fs::path TestSuite::getFullPath(string const& _testFolder) const
 
 void TestSuite::executeTest(string const& _testFolder, fs::path const& _testFileName) const
 {
+	cerr << "TestSuite.cpp executeTest" << endl;
 	fs::path const boostRelativeTestPath = fs::relative(_testFileName, getTestPath());
 	string testname = _testFileName.stem().string();
 	bool isCopySource = false;
@@ -241,6 +244,7 @@ void TestSuite::executeTest(string const& _testFolder, fs::path const& _testFile
 
 void TestSuite::executeFile(boost::filesystem::path const& _file) const
 {
+	cerr << "TestSuite.cpp executeFile" << endl;
 	json_spirit::mValue v;
 	string const s = asString(dev::contents(_file));
 	BOOST_REQUIRE_MESSAGE(s.length() > 0, "Contents of " << _file.string() << " is empty. Have you cloned the 'tests' repo branch develop and set ETHEREUM_TEST_PATH to its path?");

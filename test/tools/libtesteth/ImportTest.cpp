@@ -196,6 +196,7 @@ set<eth::Network> ImportTest::getAllNetworksFromExpectSections(
 
 bytes ImportTest::executeTest(bool _isFilling)
 {
+		cerr << "ImportTest.cpp executeTest" << endl;
     assert(m_envInfo);
     set<eth::Network> networks;
     if (!Options::get().singleTestNet.empty())
@@ -259,6 +260,7 @@ void ImportTest::checkBalance(eth::State const& _pre, eth::State const& _post, b
 
 std::tuple<eth::State, ImportTest::ExecOutput, eth::ChangeLog> ImportTest::executeTransaction(eth::Network const _sealEngineNetwork, eth::EnvInfo const& _env, eth::State const& _preState, eth::Transaction const& _tr)
 {
+	cerr << "ImportTest.cpp executeTransaction" << endl;
 	assert(m_envInfo);
 
 	State initialState = _preState;

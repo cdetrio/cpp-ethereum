@@ -44,6 +44,7 @@ namespace dev {  namespace test {
 
 json_spirit::mValue StateTestSuite::doTests(json_spirit::mValue const& _input, bool _fillin) const
 {
+	cerr << "StateTests.cpp doTests" << endl;
 	BOOST_REQUIRE_MESSAGE(_input.type() == obj_type,
 		TestOutputHelper::get().get().testFile().string() + " A GeneralStateTest file should contain an object.");
 	BOOST_REQUIRE_MESSAGE(!_fillin || _input.get_obj().size() == 1,
