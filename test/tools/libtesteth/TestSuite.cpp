@@ -127,15 +127,18 @@ void TestSuite::runAllTestsInFolder(string const& _testFolder) const
 	vector<fs::path> const compiledFiles = test::getFiles(getFullPath(_testFolder), {".json", ".yml"} ,filter);
 	for (auto const& file: compiledFiles)
 	{
+		cerr << "TestSuite.cpp runAllTestsInFolder for file in compiledFiles" << endl;
 		fs::path const expectedFillerName = getFullPathFiller(_testFolder) / fs::path(file.stem().string() + c_fillerPostf + ".json");
 		fs::path const expectedFillerName2 = getFullPathFiller(_testFolder) / fs::path(file.stem().string() + c_fillerPostf + ".yml");
 		fs::path const expectedCopierName = getFullPathFiller(_testFolder) / fs::path(file.stem().string() + c_copierPostf + ".json");
 		BOOST_REQUIRE_MESSAGE(fs::exists(expectedFillerName) || fs::exists(expectedFillerName2) || fs::exists(expectedCopierName), "Compiled test folder contains test without Filler: " + file.filename().string());
 		BOOST_REQUIRE_MESSAGE(!(fs::exists(expectedFillerName) && fs::exists(expectedFillerName2) && fs::exists(expectedCopierName)), "Src test could either be Filler.json, Filler.yml or Copier.json: " + file.filename().string());
 
+		cerr << "TestSuite.cpp runAllTestsInFolder boost messages pass." << endl;
 		// Check that filled tests created from actual fillers
 		if (Options::get().filltests == false)
 		{
+			cerr << "TestSuite.cpp runAllTestsInFolder filltests is false." << endl;
 			if (fs::exists(expectedFillerName))
 				checkFillerHash(file, expectedFillerName);
 			if (fs::exists(expectedFillerName2))
@@ -145,17 +148,22 @@ void TestSuite::runAllTestsInFolder(string const& _testFolder) const
 		}
 	}
 
+	cerr << "TestSuite.cpp runAllTestsInFolder doing run all tests..." << endl;
 	// run all tests
 	vector<fs::path> const files = test::getFiles(getFullPathFiller(_testFolder), {".json", ".yml"}, filter.empty() ? filter : filter + "Filler");
 
 	auto& testOutput = test::TestOutputHelper::get();
+	cerr << "TestSuite.cpp runAllTestsInFolder calling testOutput.initTest" << endl;
 	testOutput.initTest(files.size());
 	for (auto const& file: files)
 	{
+		cerr << "TestSuite.cpp runAllTestsInFolder for file in files..." << endl;
 		testOutput.showProgress();
 		testOutput.setCurrentTestFile(file);
+		cerr << "TestSuite.cpp runAllTestsInFolder for file in files calling executeTest" << endl;
 		executeTest(_testFolder, file);
 	}
+	cerr << "TestSuite.cpp runAllTestsInFolder calling testOutput.finishTest" << endl;
 	testOutput.finishTest();
 }
 
